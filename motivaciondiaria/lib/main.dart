@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,14 +7,12 @@ import 'models/frase_model.dart';
 
 Future<Frase> fetchFrase() async {
   final total = await http
-      .get(Uri.parse('https://api-motivaciondiaria.paraanime.com/total'));
+      .get(Uri.parse('https://api-motivaciondiaria.paraanime.com/today'));
   if (total.statusCode == 200) {
     final total_rows = json.decode(total.body);
     var my_num_rows = total_rows.toString();
-    final number = Random().nextInt(int.parse(my_num_rows)) + 1;
     final response = await http.get(Uri.parse(
-        'https://api-motivaciondiaria.paraanime.com/frase/' +
-            number.toString()));
+        'https://api-motivaciondiaria.paraanime.com/frase/' + my_num_rows));
     if (response.statusCode == 200) {
       return Frase.fromJson(jsonDecode(response.body));
     } else {
